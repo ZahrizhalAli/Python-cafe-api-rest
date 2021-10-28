@@ -59,13 +59,16 @@ def get_random():
     return jsonify(cafe=random_cafe.to_dict())
 
 
+
 # HTTP GET - SEARCH RECORD
 @app.route('/search')
 def search_data():
     loc = request.args.get('loc')
-    get_data = Cafe.query.filter_by(location=loc)
-    return jsonify([data.to_dict() for data in get_data])
-
+    get_data = Cafe.query.filter_by(location=loc).first()
+    if get_data:
+        return jsonify(get_data.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we can't find cafe at that location"})
 
 # HTTP POST - Create Record
 
